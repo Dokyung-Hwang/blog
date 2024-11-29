@@ -24,4 +24,14 @@ logging:
         type:
           descriptor: trace
 
+jwt:
+  secret: ${JWT_SECRET_KEY}
 
+  # 단위: ms
+  access:
+    expiration: 3600000 # 1시간(60분) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h))
+    header: Authorization
+
+  refresh:
+    expiration: 1209600000 #  14일(2주) (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> ??) * 14)
+    header: Authorization-refresh

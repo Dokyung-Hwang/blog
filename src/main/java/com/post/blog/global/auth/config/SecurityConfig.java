@@ -6,6 +6,9 @@ import com.post.blog.domain.account.constants.Role;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
+import com.post.blog.global.auth.oauth2.handler.OAuth2LoginFailureHandler;
+import com.post.blog.global.auth.oauth2.handler.OAuth2LoginSuccessHandler;
+import com.post.blog.global.auth.oauth2.service.CustomOAuth2UserService;
 import com.post.blog.global.login.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.post.blog.global.login.handler.LoginFailureHandler;
 import com.post.blog.global.login.handler.LoginSuccessHandler;
@@ -37,9 +40,9 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final AccountRepository accountRepository;
     private final ObjectMapper objectMapper;
-//    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-//    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-//    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -72,11 +75,11 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/account/accessDeniedTest")
                         ).hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated())
-//                .oauth2Login(oauth -> oauth
-//                        .successHandler(oAuth2LoginSuccessHandler)
-//                        .failureHandler(oAuth2LoginFailureHandler)
-//                        .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) // OAuth2 로그인 성공 후 동작
-//                )
+                .oauth2Login(oauth -> oauth
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                        .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) // OAuth2 로그인 성공 후 동작
+                )
                 .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
                 .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
                 // jwt 인증 필터를 usernamepassword 인증 필터 앞에 놓기 (/login 으로 오는 요청은 jwt 인증 필터 제외하고 바로 넘기기)
@@ -109,6 +112,7 @@ public class SecurityConfig {
         return new LoginFailureHandler();
     }
 
+    @Bean
     public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
         CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
                 = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
@@ -118,6 +122,7 @@ public class SecurityConfig {
         return customJsonUsernamePasswordLoginFilter;
     }
 
+    @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
         return new JwtAuthenticationProcessingFilter(jwtTokenProvider, accountRepository);
     }
@@ -125,5 +130,4 @@ public class SecurityConfig {
 //    public AuthExceptionFilter authExceptionFilter() {
 //        return new AuthExceptionFilter();
 //    }
-
 }

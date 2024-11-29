@@ -1,7 +1,5 @@
 package com.post.blog.domain.account.dto;
 
-import com.post.blog.domain.account.constants.Role;
-import com.post.blog.domain.account.entity.Account;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

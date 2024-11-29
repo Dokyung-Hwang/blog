@@ -3,8 +3,6 @@ package com.post.blog.global.auth.jwt.filter;
 import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
-import com.post.blog.global.exception.BusinessLogicException;
-import com.post.blog.global.exception.ExceptionCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

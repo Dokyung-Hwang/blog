@@ -2,7 +2,6 @@ package com.post.blog.global.auth.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.post.blog.domain.account.constants.Role;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
@@ -51,29 +50,33 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)  // Rest API 는 stateless 하기때문에 인증정보를 세션에 보관하지 않아 csrf 에 대해 안전
+                .formLogin(AbstractHttpConfigurer::disable) // formLogin 방식 사용 x
+                .httpBasic(AbstractHttpConfigurer::disable) // httpBasic(request header 에 id와 password를 직접 날리는 방식) 사용 X, jwt 토큰 인증 방식
                 .headers(httpSecurityHeadersConfigurer -> httpSecurityHeadersConfigurer
-                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // disable이지만 h2 사용끝날때까지 임시로 sameorigin
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // sameOrigin: 자기 자신 혹은 지정 도메인은 <Iframe(현재 페이지에 다른 페이지를 포함시키는 역할)> 허용. 그 외 나머지 사이트는 비허용, 클릭재킹 방지
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))    // Session 사용 x
 //                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
 //                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // 인증되지 않은 사용자가 인증이 필요한 요청 엔드포인트로 접근하려 할 때 발생하는 예외 처리
 //                        .accessDeniedHandler(new JwtAccessDeniedHandler())) // 인증 완료된 사용자가 권한이 없을 때 발생하는 예외 처리
+                // HTTP 요청에 대한 인가 설정(특정 경로나 URL Pattern)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
 //                                new AntPathRequestMatcher("/**"),
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/index.html"),
-                                new AntPathRequestMatcher("/account/signUp"),
-                                new AntPathRequestMatcher("/h2/**")
+                                new AntPathRequestMatcher("/account/sign-up"),
+                                new AntPathRequestMatcher("/h2-console/**"),
+                                new AntPathRequestMatcher("/oauth2/**"),
+                                new AntPathRequestMatcher("/login/**"),
+                                new AntPathRequestMatcher("/**", "GET")
                         ).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/account/accessDeniedTest")
-                        ).hasRole(Role.ADMIN.name())
+//                        .requestMatchers(
+//                                new AntPathRequestMatcher("/v1/accounts/accessDeniedTest")
+//                        ).hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated())
                 .oauth2Login(oauth -> oauth
                         .successHandler(oAuth2LoginSuccessHandler)

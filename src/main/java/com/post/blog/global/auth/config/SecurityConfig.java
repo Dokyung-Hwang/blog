@@ -51,7 +51,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterchain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -68,12 +68,12 @@ public class SecurityConfig {
 //                                new AntPathRequestMatcher("/**"),
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/index.html"),
-                                new AntPathRequestMatcher("/account/signUp"),
-                                new AntPathRequestMatcher("/h2/**")
+                                new AntPathRequestMatcher("/v1/accounts/sign-up"),
+                                new AntPathRequestMatcher("/h2-console/**")
                         ).permitAll()
-                        .requestMatchers(
-                                new AntPathRequestMatcher("/account/accessDeniedTest")
-                        ).hasRole(Role.ADMIN.name())
+//                        .requestMatchers(
+//                                new AntPathRequestMatcher("/account/accessDeniedTest")
+//                        ).hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated())
                 .oauth2Login(oauth -> oauth
                         .successHandler(oAuth2LoginSuccessHandler)

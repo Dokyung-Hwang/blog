@@ -45,15 +45,6 @@ public class Account extends BaseTimeEntity {
 
     private String refreshToken; // 리프레시 토큰
 
-    public Account(long accountId, String nickname, String email, String password, String profileImage, Role role) {
-        this.accountId = accountId;
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
-        this.profileImage = profileImage;
-        this.role = role;
-    }
-
     public Account(long accountId, String nickname, String email, String password, String profileImage, Role role, SocialType socialType, String socialId, String refreshToken) {
         this.accountId = accountId;
         this.nickname = nickname;

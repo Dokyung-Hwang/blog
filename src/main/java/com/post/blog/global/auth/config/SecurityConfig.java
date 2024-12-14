@@ -68,14 +68,16 @@ public class SecurityConfig {
 //                                new AntPathRequestMatcher("/**"),
                                 new AntPathRequestMatcher("/"),
                                 new AntPathRequestMatcher("/index.html"),
-                                new AntPathRequestMatcher("/account/sign-up"),
-                                new AntPathRequestMatcher("/h2-console/**"),
+                                new AntPathRequestMatcher("/v1/accounts/sign-up"),
+//                                new AntPathRequestMatcher("/h2-console/**"),
                                 new AntPathRequestMatcher("/oauth2/**"),
-                                new AntPathRequestMatcher("/login/**"),
-                                new AntPathRequestMatcher("/**", "GET")
+                                new AntPathRequestMatcher("/login/**")
+//                                new AntPathRequestMatcher("/**", "GET")
+//                                new AntPathRequestMatcher("/**", "POST")
                         ).permitAll()
 //                        .requestMatchers(
 //                                new AntPathRequestMatcher("/v1/accounts/accessDeniedTest")
+
 //                        ).hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated())
                 .oauth2Login(oauth -> oauth

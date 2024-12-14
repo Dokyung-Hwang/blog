@@ -20,6 +20,9 @@ public enum ExceptionCode {
     ACCOUNT_NOT_FOUND(404, "ACCOUNT-001", "Account not found"),
     ACCOUNT_NOT_ALLOW(405, "ACCOUNT-002", "That Account doesn't have authority"),
     ACCOUNT_ALREADY_EXISTS(409, "ACCOUNT-003", "Account already exists"),
+    EMAIL_ALREADY_EXISTS(409, "ACCOUNT-004", "Email already exists"),
+    NICKNAME_ALREADY_EXISTS(409, "ACCOUNT-005", "Nickname already exists"),
+    PASSWORD_NOT_VALID(400, "ACCOUNT-006", "Password Not Valid"),
 
     POST_NOT_FOUND(404, "POST-001","Post not found"),
     POST_NOT_ALLOW(405, "POST-002","That Post doesn't have authority"),

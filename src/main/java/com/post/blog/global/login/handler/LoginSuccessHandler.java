@@ -2,13 +2,13 @@ package com.post.blog.global.login.handler;
 
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
-import com.post.blog.global.login.service.AccountDetailsService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Slf4j
@@ -42,7 +42,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     }
 
     private String extractUsername(Authentication authentication) {
-        AccountDetailsService.AccountDetails accountDetails = (AccountDetailsService.AccountDetails) authentication.getPrincipal();
+        UserDetails accountDetails = (UserDetails) authentication.getPrincipal();
         return accountDetails.getUsername();
     }
 }

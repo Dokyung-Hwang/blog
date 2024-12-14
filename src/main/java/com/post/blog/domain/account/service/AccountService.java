@@ -5,6 +5,8 @@ import com.post.blog.domain.account.dto.AccountRequestDto;
 import com.post.blog.domain.account.dto.AccountResponseDto;
 import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
+import com.post.blog.global.exception.BusinessLogicException;
+import com.post.blog.global.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,30 +18,44 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public AccountResponseDto.SignUp createAccount(AccountRequestDto.SignUp signUp) {
 
-        // 예외 묶기
-//        if (accountRepository.findByEmail(sighUpDto.getEmail()).isPresent()) {
-//            throw new Exception("이미 존재하는 이메일입니다.");
-//        }
-//
-//        if (accountRepository.findByNickName(sighUpDto.getNickname()).isPresent()) {
-//            throw new Exception("이미 존재하는 닉네임입니다.");
-//        }
+        verifyExistsEmail(signUp.getEmail());
+        verifyExistsNickname(signUp.getNickname());
 
-        String encryptedPassword = passwordEncoder.encode(signUp.getPassword());
-
-        Account savedAccount = accountRepository.save(Account.builder()
+        Account account = Account.builder()
                 .email(signUp.getEmail())
-                .password(encryptedPassword)
+                .password(signUp.getPassword())
                 .nickname(signUp.getNickname())
                 .role(Role.MEMBER)
-                .build());
+                .build();
+
+        account.passwordEncode(passwordEncoder);
+        accountRepository.save(account);
 
         return AccountResponseDto.SignUp.builder()
-                .accountId(savedAccount.getAccountId())
+                .accountId(account.getAccountId())
                 .build();
+    }
+
+
+    private void verifyExistsEmail(String email) {
+        if (accountRepository.findByEmail(email).isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.EMAIL_ALREADY_EXISTS);
+        }
+    }
+
+    private void verifyExistsNickname(String nickname) {
+        if (accountRepository.findByNickname(nickname).isPresent()) {
+            throw new BusinessLogicException(ExceptionCode.NICKNAME_ALREADY_EXISTS);
+        }
+    }
+
+    private void verifyNotValidPassword(String password) {
+        if (!password.matches("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[\\W_]).{6,}$")) {
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_NOT_VALID);
+        }
     }
 }

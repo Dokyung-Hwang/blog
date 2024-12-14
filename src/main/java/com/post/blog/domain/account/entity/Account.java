@@ -4,14 +4,10 @@ import com.post.blog.domain.account.constants.Role;
 import com.post.blog.domain.account.constants.SocialType;
 import com.post.blog.global.audit.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-@Builder
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -45,6 +41,7 @@ public class Account extends BaseTimeEntity {
 
     private String refreshToken; // 리프레시 토큰
 
+    @Builder(toBuilder = true)
     public Account(long accountId, String nickname, String email, String password, String profileImage, Role role, SocialType socialType, String socialId, String refreshToken) {
         this.accountId = accountId;
         this.nickname = nickname;
@@ -56,6 +53,7 @@ public class Account extends BaseTimeEntity {
         this.socialId = socialId;
         this.refreshToken = refreshToken;
     }
+
 
     // 유저 권한 설정 메소드
     public void authorizeUser() {

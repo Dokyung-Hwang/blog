@@ -1,4 +1,4 @@
-package com.post.blog.global.login.handler;
+package com.post.blog.global.auth.login.handler;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

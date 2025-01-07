@@ -1,4 +1,4 @@
-package com.post.blog.global.login.filter;
+package com.post.blog.global.auth.login.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;

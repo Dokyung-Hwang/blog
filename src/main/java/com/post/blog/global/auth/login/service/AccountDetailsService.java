@@ -1,4 +1,4 @@
-package com.post.blog.global.login.service;
+package com.post.blog.global.auth.login.service;
 
 
 import com.post.blog.domain.account.entity.Account;

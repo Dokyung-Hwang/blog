@@ -1,4 +1,4 @@
-package com.post.blog.global.login.handler;
+package com.post.blog.global.auth.login.handler;
 
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;

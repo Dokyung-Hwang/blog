@@ -1,12 +1,9 @@
 package com.post.blog.global.auth.oauth2.handler;
 
 import com.post.blog.domain.account.constants.Role;
-import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
 import com.post.blog.global.auth.oauth2.CustomOAuth2User;
-import com.post.blog.global.exception.BusinessLogicException;
-import com.post.blog.global.exception.ExceptionCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

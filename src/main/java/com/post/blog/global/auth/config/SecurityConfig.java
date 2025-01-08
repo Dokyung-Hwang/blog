@@ -14,6 +14,7 @@ import com.post.blog.global.auth.login.filter.CustomJsonUsernamePasswordAuthenti
 import com.post.blog.global.auth.login.handler.LoginFailureHandler;
 import com.post.blog.global.auth.login.handler.LoginSuccessHandler;
 import com.post.blog.global.auth.login.service.AccountDetailsService;
+import com.post.blog.global.exception.filter.AuthExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -134,7 +135,7 @@ public class SecurityConfig {
         return new JwtAuthenticationProcessingFilter(jwtTokenProvider, accountRepository);
     }
 
-//    public AuthExceptionFilter authExceptionFilter() {
-//        return new AuthExceptionFilter();
-//    }
+    public AuthExceptionFilter authExceptionFilter() {
+        return new AuthExceptionFilter();
+    }
 }

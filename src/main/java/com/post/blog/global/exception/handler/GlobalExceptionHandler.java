@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+
+// 전역 예외 처리 담당
+// 발생 가능한 다양한 예외에 대해 일관된 응답 형식을 제공 및 관리하며 클라이언트에 적절한 응답 반환
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {

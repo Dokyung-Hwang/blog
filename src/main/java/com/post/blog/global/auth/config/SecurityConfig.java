@@ -4,6 +4,8 @@ package com.post.blog.global.auth.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.filter.JwtAuthenticationProcessingFilter;
+import com.post.blog.global.auth.jwt.handler.JwtAccessDeniedHandler;
+import com.post.blog.global.auth.jwt.handler.JwtAuthenticationEntryPoint;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
 import com.post.blog.global.auth.oauth2.handler.OAuth2LoginFailureHandler;
 import com.post.blog.global.auth.oauth2.handler.OAuth2LoginSuccessHandler;
@@ -59,9 +61,9 @@ public class SecurityConfig {
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // sameOrigin: 자기 자신 혹은 지정 도메인은 <Iframe(현재 페이지에 다른 페이지를 포함시키는 역할)> 허용. 그 외 나머지 사이트는 비허용, 클릭재킹 방지
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))    // Session 사용 x
-//                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
-//                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // 인증되지 않은 사용자가 인증이 필요한 요청 엔드포인트로 접근하려 할 때 발생하는 예외 처리
-//                        .accessDeniedHandler(new JwtAccessDeniedHandler())) // 인증 완료된 사용자가 권한이 없을 때 발생하는 예외 처리
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) // 인증되지 않은 사용자가 인증이 필요한 요청 엔드포인트로 접근하려 할 때 발생하는 예외 처리
+                        .accessDeniedHandler(new JwtAccessDeniedHandler())) // 인증 완료된 사용자가 권한이 없을 때 발생하는 예외 처리
                 // HTTP 요청에 대한 인가 설정(특정 경로나 URL Pattern)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(

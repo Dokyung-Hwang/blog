@@ -2,10 +2,9 @@ package com.post.blog.global.utils;
 
 import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
-import com.post.blog.global.exception.BusinessLogicException;
-import com.post.blog.global.exception.ExceptionCode;
+import com.post.blog.global.exception.code.BusinessLogicException;
+import com.post.blog.global.exception.code.ExceptionCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

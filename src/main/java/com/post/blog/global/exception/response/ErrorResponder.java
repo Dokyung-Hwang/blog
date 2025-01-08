@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 
 import java.io.IOException;
 
+// 예외 처리 응답 단순화
 public class ErrorResponder {
     public static void sendErrorResponse(HttpServletResponse response, ExceptionCode exceptionCode) throws IOException {
         Gson gson = new Gson();

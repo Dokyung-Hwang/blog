@@ -31,6 +31,7 @@ public class AuthExceptionFilter extends OncePerRequestFilter {
             ErrorResponder.sendErrorResponse(response, ExceptionCode.INVALID_TOKEN);
         } catch (BusinessLogicException e) {        // 비즈니스 로직에서 발생하는 커스텀 예외
             log.error("Business logic: {}", e.getMessage());
+
             ErrorResponder.sendErrorResponse(response, e.getExceptionCode());
         }
     }

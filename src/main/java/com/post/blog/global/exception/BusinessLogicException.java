@@ -1,4 +1,4 @@
-package com.post.blog.global.exception.code;
+package com.post.blog.global.exception;
 
 
 import lombok.Getter;

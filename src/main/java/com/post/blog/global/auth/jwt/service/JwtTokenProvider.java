@@ -2,6 +2,8 @@ package com.post.blog.global.auth.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.exception.code.BusinessLogicException;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
@@ -40,7 +43,7 @@ public class JwtTokenProvider {
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private static final String EMAIL_CLAIM = "email";
-    private static final String BEARER = "Bearer";
+    private static final String BEARER = "Bearer ";
 
     private final AccountRepository accountRepository;
 
@@ -71,8 +74,8 @@ public class JwtTokenProvider {
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
 
-        setAccessTokenHeader(response, accessToken);
-        setRefreshTokenHeader(response, refreshToken);
+        setAccessTokenHeader(response, "Bearer " + accessToken);
+        setRefreshTokenHeader(response, "Bearer " + refreshToken);
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
@@ -113,17 +116,17 @@ public class JwtTokenProvider {
     }
 
     // 매 인증 시(Client 에서 토큰을 헤더에 담아 요청 할 때마다) (Access, Refresh) Token 검증
-//    public void verifyToken(String token) {
-//        try {
-//            JWT.require(Algorithm.HMAC512(secretKey))
-//                    .build()
-//                    .verify(token);
-//        } catch (TokenExpiredException e) {
-//            throw new TokenExpiredException("만료된 토큰", Instant.now());
-//        } catch (JWTVerificationException e) {
-//            throw new JWTVerificationException("유효하지 않은 토큰");
-//        }
-//    }
+    public void verifyToken(String token) {
+        try {
+            JWT.require(Algorithm.HMAC512(secretKey))
+                    .build()
+                    .verify(token);
+        } catch (TokenExpiredException e) {
+            throw new TokenExpiredException("만료된 토큰", Instant.now());
+        } catch (JWTVerificationException e) {
+            throw new JWTVerificationException("유효하지 않은 토큰");
+        }
+    }
 
     public boolean isTokenValid(String token) {
         try {

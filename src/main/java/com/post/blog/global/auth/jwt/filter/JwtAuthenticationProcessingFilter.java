@@ -3,6 +3,8 @@ package com.post.blog.global.auth.jwt.filter;
 import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.auth.jwt.service.JwtTokenProvider;
+import com.post.blog.global.exception.code.BusinessLogicException;
+import com.post.blog.global.exception.code.ExceptionCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.core.authority.mapping.NullAuthoritiesMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,24 +32,55 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
     private final AccountRepository accountRepository;
 
-    private GrantedAuthoritiesMapper authoritiesMapper;
+    private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String authorization = request.getHeader("Authorization");
+
+        // authorization이 null이거나 Bearer로 시작하지 않으면 이 필터를 실행하지 않는다.(shouldNotFilter)
+        return authorization == null || !authorization.startsWith("Bearer");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().equals(NO_CHECK_URL)) {
-            filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
-            return; // return 으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
-        }
-
+//        if (request.getRequestURI().equals(NO_CHECK_URL)) {
+//            filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
+//            return; // return 으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
+//        }
         String refreshToken = jwtTokenProvider.extractRefreshToken(request)
-                .filter(jwtTokenProvider::isTokenValid)
                 .orElse(null);
+
+//        String refreshToken = jwtTokenProvider.extractRefreshToken(request)
+//                .filter(jwtTokenProvider::isTokenValid)
+//                .orElse(null);
 
         if (refreshToken == null) {
             checkAccessTokenAndAuthentication(request, response, filterChain);
         } else {
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
         }
+    }
+
+    private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                                   FilterChain filterChain) throws ServletException, IOException {
+//        jwtTokenProvider.extractAccessToken(request)
+//                .filter(jwtTokenProvider::isTokenValid)
+//                .flatMap(jwtTokenProvider::extractEmail)
+//                .flatMap(accountRepository::findByEmail)
+//                .ifPresent(this::saveAuthentication);
+//
+//
+//        filterChain.doFilter(request, response);
+        String accessToken = jwtTokenProvider.extractAccessToken(request).orElse(null);
+        log.info("test");
+        jwtTokenProvider.verifyToken(accessToken);
+
+        Account findAccount = accountRepository.findByEmail(jwtTokenProvider.extractEmail(accessToken).orElse(null))
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ACCOUNT_NOT_FOUND));
+
+        saveAuthentication(findAccount);
+        filterChain.doFilter(request, response);
     }
 
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
@@ -62,17 +96,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         account.updateRefreshToken(reIssuedRefreshToken);
         accountRepository.saveAndFlush(account);
         return reIssuedRefreshToken;
-    }
-
-    private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        jwtTokenProvider.extractAccessToken(request)
-                .filter(jwtTokenProvider::isTokenValid)
-                .flatMap(jwtTokenProvider::extractEmail)
-                .flatMap(accountRepository::findByEmail)
-                .ifPresent(this::saveAuthentication);
-
-
-        filterChain.doFilter(request, response);
     }
 
     public void saveAuthentication(Account account) {

@@ -24,9 +24,9 @@ public enum ExceptionCode {
     NICKNAME_ALREADY_EXISTS(409, "ACCOUNT-005", "Nickname already exists"),
     PASSWORD_NOT_VALID(400, "ACCOUNT-006", "Password Not Valid"),
 
-    POST_NOT_FOUND(404, "POST-001","Post not found"),
-    POST_NOT_ALLOW(405, "POST-002","That Post doesn't have authority"),
-    POST_ALREADY_EXISTS(409, "POST-003","Post already exists"),
+    BOARD_NOT_FOUND(404, "POST-001","Post not found"),
+    BOARD_NOT_ALLOW(405, "POST-002","That Post doesn't have authority"),
+    BOARD_ALREADY_EXISTS(409, "POST-003","Post already exists"),
 
     COMMENT_NOT_FOUND(404, "COMMENT-001", "Comment Not Found"),
     COMMENT_NOT_ALLOW(405, "COMMENT-002", "That Comment doesn't have authority"),

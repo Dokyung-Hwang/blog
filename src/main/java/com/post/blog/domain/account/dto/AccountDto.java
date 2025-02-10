@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class AccountRequestDto {
+public class AccountDto {
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,5 +33,14 @@ public class AccountRequestDto {
             this.password = password;
             this.nickname = nickname;
         }
+    }
+
+
+    @Getter
+    @Builder
+    public static class Response {
+        private Long accountId;
+        private String email;
+        private String nickname;
     }
 }

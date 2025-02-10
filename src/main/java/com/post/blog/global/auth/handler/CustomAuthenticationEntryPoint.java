@@ -1,5 +1,7 @@
 package com.post.blog.global.auth.handler;
 
+import com.post.blog.global.exception.code.ExceptionCode;
+import com.post.blog.global.exception.response.ErrorResponder;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +16,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-//        ErrorResponder.sendErrorResponse(response, ExceptionCode.ACCOUNT_UNAUTHORIZED);
+        ErrorResponder.sendErrorResponse(response, ExceptionCode.ACCOUNT_UNAUTHORIZED);
     }
 }

@@ -1,8 +1,7 @@
 package com.post.blog.domain.account.service;
 
 import com.post.blog.domain.account.constants.Role;
-import com.post.blog.domain.account.dto.AccountRequestDto;
-import com.post.blog.domain.account.dto.AccountResponseDto;
+import com.post.blog.domain.account.dto.AccountDto;
 import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.account.repository.AccountRepository;
 import com.post.blog.global.exception.code.BusinessLogicException;
@@ -20,7 +19,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountResponseDto.SignUp createAccount(AccountRequestDto.SignUp signUp) {
+    public AccountDto.Response createAccount(AccountDto.SignUp signUp) {
 
         verifyExistsEmail(signUp.getEmail());
         verifyExistsNickname(signUp.getNickname());
@@ -35,7 +34,7 @@ public class AccountService {
         account.passwordEncode(passwordEncoder);
         accountRepository.save(account);
 
-        return AccountResponseDto.SignUp.builder()
+        return AccountDto.Response.builder()
                 .accountId(account.getAccountId())
                 .build();
     }

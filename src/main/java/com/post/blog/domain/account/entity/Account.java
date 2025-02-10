@@ -2,10 +2,14 @@ package com.post.blog.domain.account.entity;
 
 import com.post.blog.domain.account.constants.Role;
 import com.post.blog.domain.account.constants.SocialType;
+import com.post.blog.domain.board.entity.Board;
 import com.post.blog.global.audit.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -41,6 +45,9 @@ public class Account extends BaseTimeEntity {
 
     private String refreshToken; // 리프레시 토큰
 
+    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    private List<Board> boards = new ArrayList<>();
+
     @Builder(toBuilder = true)
     public Account(long accountId, String nickname, String email, String password, String profileImage, Role role, SocialType socialType, String socialId, String refreshToken) {
         this.accountId = accountId;
@@ -67,5 +74,9 @@ public class Account extends BaseTimeEntity {
 
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
+    }
+
+    public void addBoard(Board board) {
+        this.boards.add(board);
     }
 }

@@ -89,9 +89,9 @@ public class SecurityConfig {
                         .userInfoEndpoint(config -> config.userService(customOAuth2UserService)) // OAuth2 로그인 성공 후 동작
                 )
                 .addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class)
-                .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class)
                 // jwt 인증 필터를 usernamepassword 인증 필터 앞에 놓기 (/login 으로 오는 요청은 jwt 인증 필터 제외하고 바로 넘기기)
-//                .addFilterBefore(authExceptionFilter(), JwtAuthenticationProcessingFilter.class); // 필터 내 exception handling
+                .addFilterBefore(authExceptionFilter(), JwtAuthenticationProcessingFilter.class); // 필터 내 exception handling
 
         return http.build();
     }
@@ -120,7 +120,6 @@ public class SecurityConfig {
         return new LoginFailureHandler();
     }
 
-    @Bean
     public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
         CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
                 = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
@@ -130,7 +129,6 @@ public class SecurityConfig {
         return customJsonUsernamePasswordLoginFilter;
     }
 
-    @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
         return new JwtAuthenticationProcessingFilter(jwtTokenProvider, accountRepository);
     }

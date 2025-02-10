@@ -1,8 +1,7 @@
 package com.post.blog.domain.account.controller;
 
 
-import com.post.blog.domain.account.dto.AccountRequestDto;
-import com.post.blog.domain.account.dto.AccountResponseDto;
+import com.post.blog.domain.account.dto.AccountDto;
 import com.post.blog.domain.account.service.AccountService;
 import com.post.blog.global.utils.UriCreator;
 import jakarta.validation.Valid;
@@ -27,8 +26,8 @@ public class AccountController {
     private final AccountService accountService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<HttpStatus> signUp(@Valid @RequestBody AccountRequestDto.SignUp requestDto) {
-        AccountResponseDto.SignUp responseDto = accountService.createAccount(requestDto);
+    public ResponseEntity<HttpStatus> signUp(@Valid @RequestBody AccountDto.SignUp requestDto) {
+        AccountDto.Response responseDto = accountService.createAccount(requestDto);
         URI location = UriCreator.createUri(ACCOUNT_DEFAULT_URL, responseDto.getAccountId());
 
         return ResponseEntity.created(location).build();

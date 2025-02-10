@@ -1,5 +1,6 @@
 package com.post.blog.global.response;
 
+import com.post.blog.global.audit.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 

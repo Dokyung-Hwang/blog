@@ -6,7 +6,6 @@ import com.post.blog.domain.board.entity.Board;
 import com.post.blog.domain.board.repository.BoardRepository;
 import com.post.blog.global.exception.code.BusinessLogicException;
 import com.post.blog.global.exception.code.ExceptionCode;
-import com.post.blog.global.response.PaginatedResponse;
 import com.post.blog.global.utils.AuthUserUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

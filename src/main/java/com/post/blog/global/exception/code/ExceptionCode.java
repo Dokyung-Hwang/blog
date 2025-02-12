@@ -24,13 +24,15 @@ public enum ExceptionCode {
     NICKNAME_ALREADY_EXISTS(409, "ACCOUNT-005", "Nickname already exists"),
     PASSWORD_NOT_VALID(400, "ACCOUNT-006", "Password Not Valid"),
 
-    BOARD_NOT_FOUND(404, "POST-001","Post not found"),
-    BOARD_NOT_ALLOW(405, "POST-002","That Post doesn't have authority"),
-    BOARD_ALREADY_EXISTS(409, "POST-003","Post already exists"),
+    BOARD_UNAUTHORIZED(401, "BOARD-001", "Board Unauthorized"),
+    BOARD_NOT_FOUND(404, "BOARD-002","Post not found"),
+    BOARD_NOT_ALLOW(405, "BOARD-003","That Post doesn't have authority"),
+    BOARD_ALREADY_EXISTS(409, "BOARD-004","Post already exists"),
 
-    COMMENT_NOT_FOUND(404, "COMMENT-001", "Comment Not Found"),
-    COMMENT_NOT_ALLOW(405, "COMMENT-002", "That Comment doesn't have authority"),
-    COMMENT_ALREADY_EXISTS(409, "COMMENT-003", "Comment Already Exists");
+    COMMENT_UNAUTHORIZED(401, "COMMENT-001", "No Access to Resource"),
+    COMMENT_NOT_FOUND(404, "COMMENT-002", "Comment Not Found"),
+    COMMENT_NOT_ALLOW(405, "COMMENT-003", "That Comment doesn't have authority"),
+    COMMENT_ALREADY_EXISTS(409, "COMMENT-004", "Comment Already Exists");
 
     private final int status;
     private final String code;

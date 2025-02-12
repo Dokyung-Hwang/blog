@@ -73,7 +73,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 //
 //        filterChain.doFilter(request, response);
         String accessToken = jwtTokenProvider.extractAccessToken(request).orElse(null);
-        log.info("test");
         jwtTokenProvider.verifyToken(accessToken);
 
         Account findAccount = accountRepository.findByEmail(jwtTokenProvider.extractEmail(accessToken).orElse(null))

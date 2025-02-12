@@ -3,6 +3,7 @@ package com.post.blog.domain.account.entity;
 import com.post.blog.domain.account.constants.Role;
 import com.post.blog.domain.account.constants.SocialType;
 import com.post.blog.domain.board.entity.Board;
+import com.post.blog.domain.comment.entity.Comment;
 import com.post.blog.global.audit.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -45,8 +46,12 @@ public class Account extends BaseTimeEntity {
 
     private String refreshToken; // 리프레시 토큰
 
-    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
 
     @Builder(toBuilder = true)
     public Account(long accountId, String nickname, String email, String password, String profileImage, Role role, SocialType socialType, String socialId, String refreshToken) {
@@ -78,5 +83,9 @@ public class Account extends BaseTimeEntity {
 
     public void addBoard(Board board) {
         this.boards.add(board);
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

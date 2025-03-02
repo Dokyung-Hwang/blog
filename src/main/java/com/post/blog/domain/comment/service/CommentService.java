@@ -13,6 +13,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -55,6 +59,16 @@ public class CommentService {
 //        findComment.getAccount().getComments().remove(findComment);
     }
 
+    public List<CommentDto.Response> getComments(List<Comment> comments) {
+        List<CommentDto.Response> responses = comments.stream()
+                .map(comment -> CommentDto.Response.builder()
+                        .commentId(comment.getId())
+                        .content(comment.getContent())
+                        .build()).collect(Collectors.toList());
+
+        return responses;
+    }
+
     private Account getAuthenticatedAccount() {
         return authUserUtils.getAuthUser();
     }
@@ -77,4 +91,6 @@ public class CommentService {
 
         return board;
     }
+
+
 }

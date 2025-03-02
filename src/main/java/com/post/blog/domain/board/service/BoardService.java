@@ -4,6 +4,9 @@ import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.board.dto.BoardDto;
 import com.post.blog.domain.board.entity.Board;
 import com.post.blog.domain.board.repository.BoardRepository;
+import com.post.blog.domain.comment.dto.CommentDto;
+import com.post.blog.domain.comment.entity.Comment;
+import com.post.blog.domain.comment.service.CommentService;
 import com.post.blog.global.exception.code.BusinessLogicException;
 import com.post.blog.global.exception.code.ExceptionCode;
 import com.post.blog.global.utils.AuthUserUtils;
@@ -42,11 +45,7 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
 
-        return BoardDto.Response.builder()
-                .boardId(board.getBoardId())
-                .title(board.getTitle())
-                .content(board.getContent())
-                .build();
+        return BoardDto.Response.from(board);
     }
 
     public Page<BoardDto.Response> readBoards(int page, int size) {

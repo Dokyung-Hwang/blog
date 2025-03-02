@@ -43,13 +43,19 @@ public class CommentDto {
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Response {
+        private Long accountId;
         private Long commentId;
         private String content;
 
         @Builder
-        public Response(Long commentId, String content) {
+        public Response(Long accountId, Long commentId, String content) {
+            this.accountId = accountId;
             this.commentId = commentId;
             this.content = content;
+        }
+
+        public static Response from(Comment comment) {
+            return new Response(comment.getAccount().getAccountId(), comment.getId(), comment.getContent());
         }
     }
 }

@@ -4,9 +4,6 @@ import com.post.blog.domain.account.entity.Account;
 import com.post.blog.domain.board.dto.BoardDto;
 import com.post.blog.domain.board.entity.Board;
 import com.post.blog.domain.board.repository.BoardRepository;
-import com.post.blog.domain.comment.dto.CommentDto;
-import com.post.blog.domain.comment.entity.Comment;
-import com.post.blog.domain.comment.service.CommentService;
 import com.post.blog.global.exception.code.BusinessLogicException;
 import com.post.blog.global.exception.code.ExceptionCode;
 import com.post.blog.global.utils.AuthUserUtils;
@@ -40,7 +37,6 @@ public class BoardService {
                 .build();
     }
 
-    // TODO. 추후 게시판 상세 조회 때 Comment, tag 등 추가
     public BoardDto.Response readBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));

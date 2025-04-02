@@ -1,7 +1,6 @@
 package com.post.blog.domain.comment.controller;
 
 import com.post.blog.domain.comment.dto.CommentDto;
-import com.post.blog.domain.comment.entity.Comment;
 import com.post.blog.domain.comment.service.CommentService;
 import com.post.blog.global.utils.UriCreator;
 import jakarta.validation.Valid;

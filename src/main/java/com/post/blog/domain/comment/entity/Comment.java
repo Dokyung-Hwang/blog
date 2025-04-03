@@ -16,7 +16,7 @@ public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long commentId;
 
     // Lob
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -31,8 +31,8 @@ public class Comment extends BaseTimeEntity {
     public Board board;
 
     @Builder
-    public Comment(Long id, String content, Account account, Board board) {
-        this.id = id;
+    public Comment(Long commentId, String content, Account account, Board board) {
+        this.commentId = commentId;
         this.content = content;
         this.account = account;
         this.board = board;

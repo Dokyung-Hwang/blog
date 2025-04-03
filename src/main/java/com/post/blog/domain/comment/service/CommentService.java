@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +36,7 @@ public class CommentService {
         findBoard.addComment(comment);
 
         return CommentDto.Response.builder()
-                .commentId(comment.getId())
+                .commentId(comment.getCommentId())
                 .build();
     }
 
@@ -62,7 +61,7 @@ public class CommentService {
     public List<CommentDto.Response> getComments(List<Comment> comments) {
         List<CommentDto.Response> responses = comments.stream()
                 .map(comment -> CommentDto.Response.builder()
-                        .commentId(comment.getId())
+                        .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .build()).collect(Collectors.toList());
 
@@ -91,6 +90,4 @@ public class CommentService {
 
         return board;
     }
-
-
 }

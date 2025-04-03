@@ -20,7 +20,7 @@ public class CommentDtoResponseTest {
         Account account = Account.builder().accountId(1L).build();
 
         Comment comment = Comment.builder()
-                .id(1L)
+                .commentId(1L)
                 .account(account)
                 .content("응답 테스트 댓글")
                 .build();

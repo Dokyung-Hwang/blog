@@ -7,7 +7,7 @@ import com.post.blog.domain.comment.dto.CommentDto;
 import com.post.blog.domain.comment.entity.Comment;
 import com.post.blog.domain.comment.repository.CommentRepository;
 import com.post.blog.global.utils.AuthUserUtils;
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +21,12 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("Comment Service Layer Test")
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
 
@@ -42,36 +42,31 @@ class CommentServiceTest {
     @Mock
     private AuthUserUtils authUserUtils;
 
+
     @Test
     @DisplayName("댓글 생성 성공 테스트")
     void createComment() {
         // given
-        Long boardId = 1L;
         CommentDto.Post postDto = CommentDto.Post.builder().content("테스트 댓글").build();
 
-        Account mockAccount = Account.builder()
+        Account account = Account.builder()
                 .accountId(1L)
-                .nickname("testUser")
-                .email("testUser@gmail.com")
                 .build();
-
-        Board mockBoard = Board.builder()
+        Board board = Board.builder()
                 .boardId(1L)
-                .title("테스트 게시글")
-                .account(mockAccount)
+                .account(account)
                 .comments(new ArrayList<>())
                 .build();
-
-        Comment mockComment = Comment.builder()
+        Comment comment = Comment.builder()
                 .commentId(1L)
                 .content("테스트 댓글")
-                .account(mockAccount)
-                .board(mockBoard)
+                .account(account)
+                .board(board)
                 .build();
 
-        given(authUserUtils.getAuthUser()).willReturn(mockAccount);
-        given(boardRepository.findById(boardId)).willReturn(Optional.of(mockBoard));
-        given(commentRepository.save(any(Comment.class))).willReturn(mockComment);
+        given(authUserUtils.getAuthUser()).willReturn(account);
+        given(boardRepository.findById(1L)).willReturn(Optional.of(board));
+        given(commentRepository.save(any(Comment.class))).willReturn(comment);
 
 
         // when
@@ -79,19 +74,61 @@ class CommentServiceTest {
 
         // then
         assertNotNull(responseDto);
-//        assertEquals(1L, responseDto.getCommentId());
+        assertEquals(1L, responseDto.getCommentId());
         verify(commentRepository, times(1)).save(any(Comment.class));
+
     }
 
     @Test
+    @DisplayName("댓글 수정 테스트")
     void updateComment() {
+        // given
+        Long commentId = 1L;
+        CommentDto.Update updateDto = CommentDto.Update.builder().content("수정된 댓글").build();
+        Account account = Account.builder()
+                .accountId(1L)
+                .build();
+        Board board = Board.builder()
+                .boardId(1L)
+                .comments(new ArrayList<>())
+                .build();
+        Comment comment = Comment.builder()
+                .commentId(commentId)
+                .content("수정 전 댓글")
+                .account(account)
+                .board(board)
+                .build();
+
+        given(authUserUtils.getAuthUser()).willReturn(account);
+        given(commentRepository.findById(any(Long.class))).willReturn(Optional.of(comment));
+
+        // when
+        commentService.updateComment(commentId, updateDto);
+
+        // then
+        assertEquals("수정된 댓글", comment.getContent());
     }
 
     @Test
     void deleteComment() {
-    }
+        // given
+        Long commentId = 1L;
+        Account account = Account.builder()
+                .accountId(1L)
+                .build();
+        Comment comment = Comment.builder()
+                .content("삭제 전 댓글")
+                .account(account)
+                .board(Board.builder().comments(new ArrayList<>()).build())
+                .build();
 
-    @Test
-    void getComments() {
+        given(authUserUtils.getAuthUser()).willReturn(account);
+        given(commentRepository.findById(any(Long.class))).willReturn(Optional.of(comment));
+
+        // when
+        commentService.deleteComment(commentId);
+
+        //then
+        verify(commentRepository, times(1)).delete(any(Comment.class));
     }
 }

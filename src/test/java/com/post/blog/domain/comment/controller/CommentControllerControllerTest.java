@@ -1,18 +1,14 @@
 package com.post.blog.domain.comment.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.post.blog.domain.comment.dto.CommentDto;
 import com.post.blog.domain.comment.service.CommentService;
-import com.post.blog.global.TestSetUpUtil;
+import com.post.blog.global.ControllerTestSetUpUtil;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -32,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 * CommentService를 MockBean으로 모킹하여 서비스 계층 분리                     */
 
 @WebMvcTest(CommentController.class)    // CommentController 클래스만 로딩하여 컨트롤러 계층만 집중 테스트
-class CommentControllerTest extends TestSetUpUtil {
+class CommentControllerControllerTest extends ControllerTestSetUpUtil {
 
     // 실제 서비스 대신 가짜(Mock) 객체를 사용하여 CommentService 동작을 목킹
     @MockBean

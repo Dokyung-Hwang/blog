@@ -25,12 +25,17 @@ public class CommentService {
     private final AuthUserUtils authUserUtils;
 
     public CommentDto.Response createComment(Long boardId, CommentDto.Post requestDto) {
-        Account findAccount = getAuthenticatedAccount();
+        Account findAccount = authUserUtils.getAuthUser();
         Board findBoard = getBoardByIdOrThrow(boardId, findAccount);
 
         Comment comment = requestDto.toEntity(findAccount, findBoard);
+//        Comment comment = Comment.builder()
+//                .content(requestDto.getContent())
+//                .account(Account.builder().build())
+//                .board(Board.builder().build())
+//                .build();
 
-        commentRepository.save(comment);
+        comment = commentRepository.save(comment);
 
         findAccount.addComment(comment);
         findBoard.addComment(comment);
@@ -41,7 +46,7 @@ public class CommentService {
     }
 
     public void updateComment(Long commentId, CommentDto.Update requestDto) {
-        Account findAccount = getAuthenticatedAccount();
+        Account findAccount = authUserUtils.getAuthUser();
         Comment findComment = getCommentByIdOrThrow(commentId, findAccount);
 
         findComment.updateComment(requestDto.getContent());

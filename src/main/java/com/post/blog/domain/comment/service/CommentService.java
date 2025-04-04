@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,23 +25,28 @@ public class CommentService {
     private final AuthUserUtils authUserUtils;
 
     public CommentDto.Response createComment(Long boardId, CommentDto.Post requestDto) {
-        Account findAccount = getAuthenticatedAccount();
+        Account findAccount = authUserUtils.getAuthUser();
         Board findBoard = getBoardByIdOrThrow(boardId, findAccount);
 
         Comment comment = requestDto.toEntity(findAccount, findBoard);
+//        Comment comment = Comment.builder()
+//                .content(requestDto.getContent())
+//                .account(Account.builder().build())
+//                .board(Board.builder().build())
+//                .build();
 
-        commentRepository.save(comment);
+        comment = commentRepository.save(comment);
 
         findAccount.addComment(comment);
         findBoard.addComment(comment);
 
         return CommentDto.Response.builder()
-                .commentId(comment.getId())
+                .commentId(comment.getCommentId())
                 .build();
     }
 
     public void updateComment(Long commentId, CommentDto.Update requestDto) {
-        Account findAccount = getAuthenticatedAccount();
+        Account findAccount = authUserUtils.getAuthUser();
         Comment findComment = getCommentByIdOrThrow(commentId, findAccount);
 
         findComment.updateComment(requestDto.getContent());
@@ -62,7 +66,7 @@ public class CommentService {
     public List<CommentDto.Response> getComments(List<Comment> comments) {
         List<CommentDto.Response> responses = comments.stream()
                 .map(comment -> CommentDto.Response.builder()
-                        .commentId(comment.getId())
+                        .commentId(comment.getCommentId())
                         .content(comment.getContent())
                         .build()).collect(Collectors.toList());
 
@@ -91,6 +95,4 @@ public class CommentService {
 
         return board;
     }
-
-
 }

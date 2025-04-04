@@ -53,7 +53,7 @@ public class Account extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
 
-    @Builder(toBuilder = true)
+    @Builder
     public Account(long accountId, String nickname, String email, String password, String profileImage, Role role, SocialType socialType, String socialId, String refreshToken) {
         this.accountId = accountId;
         this.nickname = nickname;
@@ -65,7 +65,6 @@ public class Account extends BaseTimeEntity {
         this.socialId = socialId;
         this.refreshToken = refreshToken;
     }
-
 
     // 유저 권한 설정 메소드
     public void authorizeUser() {

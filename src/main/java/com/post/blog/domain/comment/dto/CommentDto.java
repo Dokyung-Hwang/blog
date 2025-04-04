@@ -55,7 +55,7 @@ public class CommentDto {
         }
 
         public static Response from(Comment comment) {
-            return new Response(comment.getAccount().getAccountId(), comment.getId(), comment.getContent());
+            return new Response(comment.getAccount().getAccountId(), comment.getCommentId(), comment.getContent());
         }
     }
 }

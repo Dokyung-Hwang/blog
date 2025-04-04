@@ -41,6 +41,10 @@ dependencies {
 	// JWT 토큰 생성 및 검증
 	implementation 'com.auth0:java-jwt:4.2.1'
 
+	// Test Code 에서 Slf4j 사용하기
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
 //	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 //	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 //	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'	// JSON 처리를 위한 라이브러리

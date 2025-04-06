@@ -1,6 +1,7 @@
 package com.post.blog.global.exception.code;
 
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter

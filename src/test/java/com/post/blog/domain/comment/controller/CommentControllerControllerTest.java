@@ -77,7 +77,7 @@ class CommentControllerControllerTest extends ControllerTestSetUpUtil {
     }
 
     @WithMockUser
-    @DisplayName("댓글 수정 API 테스트")
+    @DisplayName("댓글 삭제 API 테스트")
     @Test
     void deleteComment() throws Exception {
         // given
